@@ -20,8 +20,8 @@
       <div class="col-sm-6" id="floors">
 
         <div ng-repeat="floor in elevator.floors track by $index">
-          <div id="floor-indicator">floor indicator</div>
           <div id="doors">doors</div>
+          <div id="floor-indicator">{{ floor | floorFilter }}</div>
           <div id="call-buttons">call buttons</div>
         </div>
 
