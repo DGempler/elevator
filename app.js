@@ -4,16 +4,22 @@
 
     .controller('elevatorController', elevatorController)
 
-    .filter('floorFilter', floorFilter);
+    .filter('floorFilter', floorFilter)
+
+    .filter('reverse', reverse);
 
     function elevatorController() {
       var vm = this;
 
       vm.floors = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
+      vm.floorsToVisit = [];
+
       vm.handleFloorButtonClick = function(floor) {
 
         console.log(floor);
+
+        vm.floorsToVisit.push(floor);
 
       }
 
@@ -25,6 +31,7 @@
         } else {
 
           console.log('going down!');
+
         }
 
 
@@ -42,5 +49,12 @@
         }
       }
     }
+
+    function reverse() {
+      return function(floors) {
+        return floors.slice().reverse();
+      };
+    };
+
 
 })();

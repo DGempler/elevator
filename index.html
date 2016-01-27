@@ -19,12 +19,12 @@
 
       <div class="col-sm-6" id="floors">
 
-        <div ng-repeat="floor in elevator.floors track by $index">
+        <div ng-repeat="floor in elevator.floors | reverse ">
           <div id="doors">doors</div>
           <div id="floor-indicator">{{ floor | floorFilter }}</div>
           <div id="call-buttons">
-            <span ng-click="elevator.handleCallButtonClick(true)" class="glyphicon glyphicon-arrow-up"></span>
-            <span ng-click="elevator.handleCallButtonClick(false)" class="glyphicon glyphicon-arrow-down"></span>
+            <span ng-hide="floor === 9" ng-click="elevator.handleCallButtonClick(true)" class="glyphicon glyphicon-arrow-up"></span>
+            <span ng-hide="floor === 0" ng-click="elevator.handleCallButtonClick(false)" class="glyphicon glyphicon-arrow-down"></span>
           </div>
         </div>
 
@@ -34,7 +34,7 @@
 
         <div id="floor-indicator">
 
-          <p ng-repeat="floor in elevator.floors track by $index"> {{ floor }} </p>
+          <p ng-repeat="floor in elevator.floors track by $index"> {{ floor | floorFilter }} </p>
 
         </div>
 
