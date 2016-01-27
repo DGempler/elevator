@@ -10,35 +10,37 @@
 
     function elevatorController() {
       var vm = this;
+      var pendingFloors = [];
 
       vm.floors = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-      vm.floorsToVisit = [];
 
       vm.handleFloorButtonClick = function(floor) {
 
-        console.log(floor);
-
-        vm.floorsToVisit.push(floor);
+        addToPendingFloorFromFloorButtonClick(floor);
 
       }
 
-      vm.handleCallButtonClick = function(isUp) {
-        if (isUp) {
-
-          console.log('going up!');
-
-        } else {
-
-          console.log('going down!');
-
-        }
+      vm.handleCallButtonClick = function(floor, isUp) {
+        addToPendingFloorsFromCallButtonClick(floor, isUp);
 
 
       }
 
+      function addToPendingFloorsFromCallButtonClick(floor, isUp) {
+        pendingFloors.push(floor);
+        console.log(pendingFloors);
+
+      }
+
+      function addToPendingFloorFromFloorButtonClick(floor) {
+        pendingFloors.push(floor);
+        console.log(pendingFloors);
+
+      }
 
     }
+
 
     function floorFilter() {
       return function(floor) {
@@ -55,6 +57,8 @@
         return floors.slice().reverse();
       };
     };
+
+
 
 
 })();
