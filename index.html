@@ -19,7 +19,7 @@
 
       <div class="col-sm-6" id="floors">
 
-        <div ng-repeat="button in elevator.floors track by $index">
+        <div ng-repeat="floor in elevator.floors track by $index">
           <div id="floor-indicator">floor indicator</div>
           <div id="doors">doors</div>
           <div id="call-buttons">call buttons</div>
@@ -29,9 +29,16 @@
 
       <div class="col-sm-6" id="elevator">
 
-        <div id="floor-indicator"></div>
+        <div id="floor-indicator">
 
-        <div id="up-down-indicator"></div>
+          <p ng-repeat="floor in elevator.floors track by $index"> {{ floor }} </p>
+
+        </div>
+
+        <div id="up-down-indicator">
+            <span class="glyphicon glyphicon-arrow-up"></span>
+            <span class="glyphicon glyphicon-arrow-down"></span>
+        </div>
 
         <div id="buttons">
           <div ng-repeat="button in elevator.floors track by $index" id="{{button}}">{{ button }}</div>
