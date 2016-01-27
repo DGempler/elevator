@@ -17,13 +17,25 @@
 
       }
 
+      vm.handleCallButtonClick = function(isUp) {
+        if (isUp) {
+
+          console.log('going up!');
+
+        } else {
+
+          console.log('going down!');
+        }
+
+
+      }
+
 
     }
 
     function floorFilter() {
       return function(floor) {
         if (floor === 0) {
-          console.log("floor is 0");
           return "Ground";
         } else {
           return floor;
