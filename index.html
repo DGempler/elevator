@@ -41,7 +41,7 @@
         </div>
 
         <div id="buttons">
-          <div ng-repeat="button in elevator.floors track by $index" id="{{button}}">{{ button }}</div>
+          <div ng-repeat="button in elevator.floors track by $index" id="{{button}}" ng-click="elevator.handleFloorButtonClick(button)">{{ button }}</div>
         </div>
 
 
