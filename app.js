@@ -1,5 +1,11 @@
 "use strict";
 
+/*
+refactor by passing state into functions instead of storing in variables?
+
+make sure to handle button presses inside elevator if nobodfy has pressed call yet
+*/
+
 (function() {
 
   angular.module('elevator', [])
@@ -12,9 +18,9 @@
 
     function elevatorController() {
       var vm = this;
-      // vm.floors = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+      vm.floors = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-      var floorArray = [null, null, null, null, null, null, null, null, null, null, null, null];
+      vm.floorArray = [null, null, null, null, null, null, null, null, null, null, null, null];
       var currentFloor = 0;
       var elevatorDirection = null;
       var numFloorsToVisitUp = 0;
@@ -59,15 +65,15 @@
 
       // refactor!!!
       function addToPendingFloors(floor) {
-        floorArray[floor] = 'stop';
+        vm.floorArray[floor] = 'stop';
         addToVisitCounter(floor);
       }
 
       function addCallToPendingFloors(floor, isUp) {
         if (isUp) {
-          floorArray[floor] = 'up';
+          vm.floorArray[floor] = 'up';
         } else {
-          floorArray[floor] = 'down';
+          vm.floorArray[floor] = 'down';
         }
 
         addToVisitCounter(floor);
@@ -83,7 +89,16 @@
           numFloorsToVisitUp++;
         } else if (elevatorDirection === "up" && floor < currentFloor) {
           numFloorsToVisitDown++;
+        } else if (elevatorDirection === null && floor > currentFloor) {
+          numFloorsToVisitUp++;
+        } else if (elevatorDirection === null && floor < currentFloor) {
+          numFloorsToVisitDown++;
         }
+        console.log("up");
+        console.log(numFloorsToVisitUp);
+        console.log("down");
+        console.log(numFloorsToVisitDown);
+        console.log(vm.floorArray);
       }
 
       function activateElevator() {
@@ -115,10 +130,10 @@
       }
 
       function determineFloorAction() {
-        if (floorArray[currentFloor] === "stop" || floorArray[currentFloor] === elevatorDirection) {
-          floorArray[currentFloor] = null;
+        if (vm.floorArray[currentFloor] === "stop" || vm.floorArray[currentFloor] === elevatorDirection) {
+          vm.floorArray[currentFloor] = null;
           openCloseElevator();
-        } else if (floorArray[currentFloor] === null || floorArray[currentFloor] !== elevatorDirection) {
+        } else if (vm.floorArray[currentFloor] === null || vm.floorArray[currentFloor] !== elevatorDirection) {
           moveElevator();
         }
       }
@@ -141,6 +156,7 @@
       function openCloseElevator() {
         // open & close, and add 3 or 2 second delay
         pending = true;
+        console.log("opening and closing elevator");
         setTimeout(function() {
           pending = false;
         }, 3000);
@@ -149,6 +165,7 @@
       function moveElevator() {
         // add 1 second delay
         pending = true;
+        console.log("movingElevator");
         setTimeout(function() {
           pending = false;
         }, 1000);

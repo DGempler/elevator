@@ -34,7 +34,7 @@
 
         <div id="floor-indicator">
 
-          <p ng-repeat="floor in elevator.floors track by $index"> {{ floor | floorFilter }} </p>
+          <p ng-repeat="floor in elevator.floorArray track by $index"> {{ $index | floorFilter }} </p>
 
         </div>
 
@@ -44,7 +44,7 @@
         </div>
 
         <div id="buttons">
-          <div ng-repeat="button in elevator.floors track by $index" id="{{button}}" ng-click="elevator.handleInElevButtonPress(button)">{{ button }}</div>
+          <div ng-repeat="button in elevator.floorArray track by $index" id="{{$index}}" ng-click="elevator.handleInElevButtonPress(button)">{{ $index }}</div>
         </div>
 
 
