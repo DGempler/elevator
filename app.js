@@ -115,10 +115,10 @@
       }
 
       function determineFloorAction() {
-        if (floorArray[currentFloor] === "stop") {
+        if (floorArray[currentFloor] === "stop" || floorArray[currentFloor] === elevatorDirection) {
           floorArray[currentFloor] = null;
           openCloseElevator();
-        } else if (floorArray[currentFloor] === null) {
+        } else if (floorArray[currentFloor] === null || floorArray[currentFloor] !== elevatorDirection) {
           moveElevator();
         }
       }
