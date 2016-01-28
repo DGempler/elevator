@@ -12,99 +12,121 @@
 
     function elevatorController() {
       var vm = this;
-      var headingUpFloors = [];
-      var headingDownFloors = [];
-      var elevatorDirectionUp = true;
-      var currentFloor = 5;
+      // vm.floors = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-      vm.floors = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+      var floorArray = [null, null, null, null, null, null, null, null, null, null, null, null];
+      var currentFloor = 0;
+      var elevatorDirection = null;
+      var numFloorsToVisitUp = 0;
+      var numFloorsToVisitDown = 0;
 
-
-      vm.handleFloorButtonClick = function(floor) {
-
+      vm.handleCallButtonPress = function(floor, isUp) {
         if (currentFloor === floor) {
-          return;
-        } else if (floor > currentFloor) {
-
-          addToPendingFloors(floor, headingUpFloors);
-
-          if (headingDownFloors.length === 0) {
-            elevatorDirectionUp = true;
-          }
-
+          openCloseElevator();
         } else {
-          addToPendingFloors(floor, headingDownFloors);
+          // addCallToPendingFloors(floor, isUp)?
+        }
+      };
 
-          if (headingUpFloors.length === 0) {
-            elevatorDirectionUp = false;
-          }
+
+      vm.handleInElevButtonPress = function(floor) {
+
+        if (floor === currentFloor) {
+          openCloseElevator();
+          return;
         }
 
-
-      };
-
-      vm.handleCallButtonClick = function(floor, isUp) {
-        addToPendingFloorsFromCallButtonClick(floor, isUp);
-
-
-      };
-
-      function addToPendingFloorsFromCallButtonClick(floor, isUp) {
-        if (currentFloor === floor) {
-          return;
-        } else if (isUp) {
-
-          addToPendingFloors(floor, headingUpFloors);
-
-          if (headingDownFloors.length === 0) {
-            elevatorDirectionUp = true;
-          }
-
+        if (!elevatorDirection) {
+          determineInitialDirection(floor);
+          addToPendingFloors(floor);
+          activateElevator();
         } else {
-          addToPendingFloors(floor, headingDownFloors);
+          addToPendingFloors(floor);
+        }
 
-          if (headingUpFloors.length === 0) {
-            elevatorDirectionUp = false;
-          }
+      };
+
+      function determineInitialDirection(floor) {
+
+        if (floor > currentFloor) {
+          elevatorDirection = "up";
+        } else {
+          elevatorDirection = "down";
         }
 
       }
 
-      function addToPendingFloors(floor, floorArray) {
-
-        if (floorArray.indexOf(floor) !== -1) {
-          return;
+      // refactor!!!
+      function addToPendingFloors(floor) {
+        floorArray[floor] = 'stop';
+        if (elevatorDirection === "up" && floor > currentFloor) {
+          numFloorsToVisitUp++;
+        } else if (elevatorDirection === "down" && floor < currentFloor) {
+          numFloorsToVisitDown++;
+        } else if (elevatorDirection === "down" && floor > currentFloor) {
+          numFloorsToVisitUp++;
+        } else if (elevatorDirection === "up" && floor < currentFloor) {
+          numFloorsToVisitDown++;
         }
-
-        if (floorArray.length === 0) {
-          floorArray.push(floor);
-        } else {
-
-          for (var i = floorArray.length - 1; i > -1; i--) {
-            if (floor > floorArray[i]) {
-              floorArray.push(floor);
-              break;
-            } else if (floor < floorArray[i] && floor > floorArray[i - 1]) {
-
-              floorArray.splice(i, 0, floor);
-              break;
-
-            } else if (i === 0) {
-
-              floorArray.unshift(floor);
-              break;
-
-            }
-
-          }
-
-        }
-
-        console.log(floorArray);
 
       }
 
+      function activateElevator() {
+        if (elevatorDirection === null) {
+          return;
+        }
 
+        if (elevatorDirection === "up") {
+          while (numFloorsToVisitUp) {
+            currentFloor++;
+            determineFloorAction();
+            numFloorsToVisitUp--;
+          }
+        } else if (elevatorDirection === "down") {
+          while (numFloorsToVisitDown) {
+            currentFloor--;
+            determineFloorAction();
+            numFloorsToVisitDown--;
+          }
+        }
+
+        determineNewDirection();
+        activateElevator();
+
+      }
+
+      function determineFloorAction() {
+        if (floorArray[currentFloor] === "stop") {
+          floorArray[currentFloor] === null;
+          openCloseElevator();
+        } else if (floorArray[currentFloor] === null) {
+          moveElevator();
+        }
+      }
+
+      // refactor!
+      function determineNewDirection() {
+        if (elevatorDirection === "up" && numFloorsToVisitUp) {
+          return;
+        } else if (elevatorDirection === "down" && numFloorsToVisitDown) {
+          return;
+        } else if (elevatorDirection === "up" && numFloorsToVisitDown) {
+          elevatorDirection = "down";
+        } else if (elevatorDirection === "down" && numFloorsToVisitUp) {
+          elevatorDirection = "up";
+        } else {
+          elevatorDirection = null;
+        }
+      }
+
+      function openCloseElevator() {
+        // open & close, and add 3 or 2 second delay
+
+      }
+
+      function moveElevator() {
+        // add 1 second delay
+      }
 
     }
 
