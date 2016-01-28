@@ -1,3 +1,5 @@
+"use strict";
+
 (function() {
 
   angular.module('elevator', [])
@@ -19,13 +21,13 @@
 
         addToPendingFloorFromFloorButtonClick(floor);
 
-      }
+      };
 
       vm.handleCallButtonClick = function(floor, isUp) {
         addToPendingFloorsFromCallButtonClick(floor, isUp);
 
 
-      }
+      };
 
       function addToPendingFloorsFromCallButtonClick(floor, isUp) {
         pendingFloors.push(floor);
@@ -34,7 +36,34 @@
       }
 
       function addToPendingFloorFromFloorButtonClick(floor) {
-        pendingFloors.push(floor);
+        if (pendingFloors.indexOf(floor) !== -1) {
+          return;
+        }
+
+        if (pendingFloors.length === 0) {
+          pendingFloors.push(floor);
+        } else {
+
+          for (var i = pendingFloors.length - 1; i > -1; i--) {
+            if (floor > pendingFloors[i]) {
+              pendingFloors.push(floor);
+              break;
+            } else if (floor < pendingFloors[i] && floor > pendingFloors[i - 1]) {
+
+              pendingFloors.splice(i, 0, floor);
+              break;
+
+            } else if (i === 0) {
+
+              pendingFloors.unshift(floor);
+              break;
+
+            }
+
+          }
+
+        }
+
         console.log(pendingFloors);
 
       }
@@ -49,16 +78,14 @@
         } else {
           return floor;
         }
-      }
+      };
     }
 
     function reverse() {
       return function(floors) {
         return floors.slice().reverse();
       };
-    };
-
-
+    }
 
 
 })();
