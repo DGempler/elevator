@@ -50,8 +50,23 @@
       };
 
       function addToPendingFloorsFromCallButtonClick(floor, isUp) {
-        pendingFloors.push(floor);
-        console.log(pendingFloors);
+        if (currentFloor === floor) {
+          return;
+        } else if (isUp) {
+
+          addToPendingFloors(floor, headingUpFloors);
+
+          if (headingDownFloors.length === 0) {
+            elevatorDirectionUp = true;
+          }
+
+        } else {
+          addToPendingFloors(floor, headingDownFloors);
+
+          if (headingUpFloors.length === 0) {
+            elevatorDirectionUp = false;
+          }
+        }
 
       }
 
