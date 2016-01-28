@@ -12,14 +12,34 @@
 
     function elevatorController() {
       var vm = this;
-      var pendingFloors = [];
+      var headingUpFloors = [];
+      var headingDownFloors = [];
+      var elevatorDirectionUp = true;
+      var currentFloor = 5;
 
       vm.floors = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 
       vm.handleFloorButtonClick = function(floor) {
 
-        addToPendingFloorFromFloorButtonClick(floor);
+        if (currentFloor === floor) {
+          return;
+        } else if (floor > currentFloor) {
+
+          addToPendingFloors(floor, headingUpFloors);
+
+          if (headingDownFloors.length === 0) {
+            elevatorDirectionUp = true;
+          }
+
+        } else {
+          addToPendingFloors(floor, headingDownFloors);
+
+          if (headingUpFloors.length === 0) {
+            elevatorDirectionUp = false;
+          }
+        }
+
 
       };
 
@@ -35,27 +55,28 @@
 
       }
 
-      function addToPendingFloorFromFloorButtonClick(floor) {
-        if (pendingFloors.indexOf(floor) !== -1) {
+      function addToPendingFloors(floor, floorArray) {
+
+        if (floorArray.indexOf(floor) !== -1) {
           return;
         }
 
-        if (pendingFloors.length === 0) {
-          pendingFloors.push(floor);
+        if (floorArray.length === 0) {
+          floorArray.push(floor);
         } else {
 
-          for (var i = pendingFloors.length - 1; i > -1; i--) {
-            if (floor > pendingFloors[i]) {
-              pendingFloors.push(floor);
+          for (var i = floorArray.length - 1; i > -1; i--) {
+            if (floor > floorArray[i]) {
+              floorArray.push(floor);
               break;
-            } else if (floor < pendingFloors[i] && floor > pendingFloors[i - 1]) {
+            } else if (floor < floorArray[i] && floor > floorArray[i - 1]) {
 
-              pendingFloors.splice(i, 0, floor);
+              floorArray.splice(i, 0, floor);
               break;
 
             } else if (i === 0) {
 
-              pendingFloors.unshift(floor);
+              floorArray.unshift(floor);
               break;
 
             }
@@ -64,9 +85,11 @@
 
         }
 
-        console.log(pendingFloors);
+        console.log(floorArray);
 
       }
+
+
 
     }
 
