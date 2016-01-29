@@ -26,7 +26,7 @@
           openCloseElevator();
           // wait for in elev button press
         } else {
-          addCallToPendingFloors(floor, isUp);
+          // addCallToPendingFloors(floor, isUp);
         }
       };
 
@@ -38,11 +38,12 @@
           return;
         }
 
-        if (elevatorDirection === null && floorArray.length === 0) {
+        if (elevatorDirection === null) {
           // do these things here?
-          // setInitialDirection();
-          // floorArray.push(floor);
-          insertInCurrentDirection(floor);
+          setInitialDirection(floor);
+          floorArray.push(floor);
+          console.log(floorArray);
+          // insertInCurrentDirection(floor);
           activateElevator();
           return;
         }
@@ -58,8 +59,10 @@
           insertInCurrentDirection(floor);
 
         } else if (floor > currentFloor && elevatorDirection === "down") {
+          console.log('case 3');
           insertInOtherDirection(floor);
         } else if (floor < currentFloor && elevatorDirection === "up") {
+          console.log('case 4');
           insertInOtherDirection(floor);
         } else {
           console.log("you have unlocked the secret $$$$$$$$$$$$$$$$$$$$$ basement");
@@ -88,14 +91,7 @@
 
 
       function insertInCurrentDirection(floor) {
-        if (elevatorDirection === null) {
-          // remove this check since do in handleInElv?
-          // or leave just in case it gets set to null just before next button is pressed?
-          setInitialDirection(floor);
-          floorArray.push(floor);
-          console.log(floorArray);
-
-        } else if (elevatorDirection === "up") {
+        if (elevatorDirection === "up") {
           // moved to sort Current Direction functions
           // floorArray.splice(numFloorsToVisitUp, 0, floor);
           sortCurrentDirectionUp(floor);
