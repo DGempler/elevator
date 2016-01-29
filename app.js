@@ -23,6 +23,7 @@
 
       vm.handleCallButtonPress = function(floor, isUp) {
         if (currentFloor === floor) {
+          if (doorsOpened) return;
           openCloseElevator();
           // wait for in elev button press
         } else {
@@ -34,6 +35,7 @@
       vm.handleInElevButtonPress = function(floor) {
 
         if (currentFloor === floor) {
+          if (doorsOpened) return;
           openCloseElevator();
           return;
         }
@@ -168,7 +170,8 @@
 
       function sortOtherDirectionDown(floor) {
         var downFloors = floorArray.slice(numFloorsToVisitUp);
-        console.log(upFloors)
+        console.log(downFloors);
+
 
 
 
