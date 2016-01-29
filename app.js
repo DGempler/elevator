@@ -128,7 +128,7 @@
         console.log(floorArray);
         console.log("i = " + (floorArray.length -2));
 
-        for (i = floorArray.length -2; i > -1; i--) {
+        for (i = numFloorsToVisitUp -1; i > -1; i--) {
           if (floor < floorArray[i]) {
             floorArray[i+1] = floorArray[i];
           } else {
@@ -153,7 +153,7 @@
 
         floorArray.splice(numFloorsToVisitDown, 0, floor);
 
-        for (i = floorArray.length -2; i > -1; i--) {
+        for (i = numFloorsToVisitDown -1; i > -1; i--) {
           if (floor > floorArray[i]) {
             floorArray[i+1] = floorArray[i];
           } else {
@@ -170,7 +170,17 @@
 
       function sortOtherDirectionDown(floor) {
         var downFloors = floorArray.slice(numFloorsToVisitUp);
+        var i;
         console.log(downFloors);
+        if (downFloors.indexOf(floor) !== -1) {
+          // what is direction is wrong?
+          return;
+        }
+
+        floorArray.push(floor);
+        for (i = floorArray.length -1; ;) {
+
+        }
 
 
 
