@@ -28,9 +28,19 @@
             clearTimeout(timeoutID);
           }
           openCloseElevator();
-          // wait for in elev button press
+          return;
+        }
+
+        if (elevatorDirection === null) {
+          // do these things here?
+          setInitialDirection(floor);
+          floorArray.push(floor);
+          console.log(floorArray);
+          // insertInCurrentDirection(floor);
+          activateElevator();
+          return;
         } else {
-          // addCallToPendingFloors(floor, isUp);
+          addCall(floor, isUp);
         }
       };
 
@@ -78,22 +88,22 @@
       };
 
 
-      // function addCallToPendingFloors(floor, isUp) {
-      //   if (floor > currentFloor && (elevatorDirection === "up" || elevatorDirection === null)) {
-      //     insertIntoFloorArray(floor, true, isUp);
-      //   } else if (floor < currentFloor && (elevatorDirection === "down" || elevatorDirection === null)) {
-      //     insertIntoFloorArray(floor, true, isUp);
-      //   } else if (floor > currentFloor && elevatorDirection === "down") {
-      //     insertIntoFloorArray(floor, false, isUp);
-      //   } else if (floor < currentFloor && elevatorDirection === "up") {
-      //     insertIntoFloorArray(floor, false, isUp);
-      //   }
+      function addCall(floor, isUp) {
+        if (floor > currentFloor && (elevatorDirection === "up" || elevatorDirection === null)) {
+          insertIntoFloorArray(floor, true, isUp);
+        } else if (floor < currentFloor && (elevatorDirection === "down" || elevatorDirection === null)) {
+          insertIntoFloorArray(floor, true, isUp);
+        } else if (floor > currentFloor && elevatorDirection === "down") {
+          insertIntoFloorArray(floor, false, isUp);
+        } else if (floor < currentFloor && elevatorDirection === "up") {
+          insertIntoFloorArray(floor, false, isUp);
+        }
 
-      // }
+      }
 
-      // function insertIntoFloorArray(floor, isHeadingSameDirection, isUp) {
+      function insertIntoFloorArray(floor, isHeadingSameDirection, isUp) {
 
-      // }
+      }
 
 
 
@@ -281,6 +291,7 @@
         console.log(elevatorDirection);
 
       }
+
 
       function openCloseElevator(hasArrived) {
         // open & close, and add 3 or 2 second delay
