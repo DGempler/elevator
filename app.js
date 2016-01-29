@@ -22,7 +22,7 @@
 
       vm.floors = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-      vm.handleCallButtonPress = function(floor, isUp) {
+      vm.handleCallButtonPress = function(floor, upRequest) {
         if (currentFloor === floor) {
           if (doorsOpened) {
             clearTimeout(timeoutID);
@@ -39,9 +39,42 @@
           // insertInCurrentDirection(floor);
           activateElevator();
           return;
-        } else {
-          addCall(floor, isUp);
         }
+
+        if (floor > currentFloor && elevatorDirection === "up" && upRequest) {
+
+          insertInCurrentDirection(floor);
+
+        } else if (floor < currentFloor && elevatorDirection === "down" && !upRequest) {
+
+          insertInCurrentDirection(floor);
+
+        } else if (floor > currentFloor && elevatorDirection === "up" && !upRequest) {
+          console.log('case 3');
+          insertInOtherDirection(floor);
+        } else if (floor < currentFloor && elevatorDirection === "down" && upRequest) {
+          console.log('case 4');
+          insertInOtherDirection(floor);
+        } else if (floor > currentFloor && elevatorDirection === "down" && upRequest) {
+
+          insertInOtherDirection(floor);
+
+        } else if (floor < currentFloor && elevatorDirection === "up" && !upRequest) {
+
+          insertInOtherDirection(floor);
+
+        } else if (floor < currentFloor && elevatorDirection === "up" && upRequest) {
+
+          insertInOtherDirection(floor);
+
+        } else if (floor > currentFloor && elevatorDirection === "down" && !upRequest) {
+
+          insertInOtherDirection(floor);
+
+        } else {
+          console.log("you have unlocked the secret $$$$$$$$$$$$$$$$$$$$$ basement");
+        }
+
       };
 
 
