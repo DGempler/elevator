@@ -18,12 +18,15 @@
       var numFloorsToVisitUp = 0;
       var numFloorsToVisitDown = 0;
       var doorsOpened = false;
+      var timeoutID;
 
       vm.floors = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
       vm.handleCallButtonPress = function(floor, isUp) {
         if (currentFloor === floor) {
-          if (doorsOpened) return;
+          if (doorsOpened) {
+            clearTimeout(timeoutID);
+          }
           openCloseElevator();
           // wait for in elev button press
         } else {
@@ -35,7 +38,9 @@
       vm.handleInElevButtonPress = function(floor) {
 
         if (currentFloor === floor) {
-          if (doorsOpened) return;
+          if (doorsOpened) {
+            clearTimeout(timeoutID);
+          }
           openCloseElevator();
           return;
         }
@@ -289,7 +294,7 @@
         setNewDirection();
         doorsOpened = true;
         console.log("opening elevator");
-        setTimeout(function() {
+        timeoutID = setTimeout(function() {
           // to only close elevator and call functions once
           if (doorsOpened) {
             console.log('closing elevator');
