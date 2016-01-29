@@ -260,9 +260,7 @@
         }
 
 
-        console.log("moving");
         setTimeout(function() {
-          console.log('done moving');
           currentFloor++;
           console.log(currentFloor);
           moveElevatorUp();
@@ -276,10 +274,7 @@
           return;
         }
 
-
-        console.log("moving");
         setTimeout(function() {
-          console.log('done moving');
           currentFloor--;
           console.log(currentFloor);
           moveElevatorDown();
