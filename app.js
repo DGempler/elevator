@@ -57,27 +57,33 @@
           // true for heading same direction as current elevator
           insertInCurrentDirection(floor);
 
+        } else if (floor > currentFloor && elevatorDirection === "down") {
+          insertInOtherDirection(floor);
+        } else if (floor < currentFloor && elevatorDirection === "up") {
+          insertInOtherDirection(floor);
+        } else {
+          console.log("you have unlocked the secret $$$$$$$$$$$$$$$$$$$$$ basement");
         }
 
       };
 
 
-      function addCallToPendingFloors(floor, isUp) {
-        if (floor > currentFloor && (elevatorDirection === "up" || elevatorDirection === null)) {
-          insertIntoFloorArray(floor, true, isUp);
-        } else if (floor < currentFloor && (elevatorDirection === "down" || elevatorDirection === null)) {
-          insertIntoFloorArray(floor, true, isUp);
-        } else if (floor > currentFloor && elevatorDirection === "down") {
-          insertIntoFloorArray(floor, false, isUp);
-        } else if (floor < currentFloor && elevatorDirection === "up") {
-          insertIntoFloorArray(floor, false, isUp);
-        }
+      // function addCallToPendingFloors(floor, isUp) {
+      //   if (floor > currentFloor && (elevatorDirection === "up" || elevatorDirection === null)) {
+      //     insertIntoFloorArray(floor, true, isUp);
+      //   } else if (floor < currentFloor && (elevatorDirection === "down" || elevatorDirection === null)) {
+      //     insertIntoFloorArray(floor, true, isUp);
+      //   } else if (floor > currentFloor && elevatorDirection === "down") {
+      //     insertIntoFloorArray(floor, false, isUp);
+      //   } else if (floor < currentFloor && elevatorDirection === "up") {
+      //     insertIntoFloorArray(floor, false, isUp);
+      //   }
 
-      }
+      // }
 
-      function insertIntoFloorArray(floor, isHeadingSameDirection, isUp) {
+      // function insertIntoFloorArray(floor, isHeadingSameDirection, isUp) {
 
-      }
+      // }
 
 
 
@@ -102,6 +108,18 @@
 
       }
 
+      function insertInOtherDirection(floor) {
+        if (elevatorDirection === null) {
+          // remove this check since do in handleInElv?
+          // or leave just in case it gets set to null just before next button is pressed?
+          setInitialDirection(floor);
+          floorArray.push(floor);
+          console.log(floorArray);
+        } else if (elevatorDirection === "down") {
+
+        }
+      }
+
       // already compared current floor, compare existing floors to determine where to put it
       function sortCurrentDirectionUp(floor) {
         var upFloors = floorArray.slice(0, numFloorsToVisitUp + 1);
@@ -114,7 +132,7 @@
         console.log('numfloorstovisitup: ' + numFloorsToVisitUp);
         floorArray.splice(numFloorsToVisitUp, 0, floor);
         console.log(floorArray);
-        console.log("i = " + floorArray.length -2);
+        console.log("i = " + (floorArray.length -2));
 
         for (i = floorArray.length -2; i > -1; i--) {
           if (floor < floorArray[i]) {
@@ -212,12 +230,12 @@
 
       }
 
-      function openCloseElevator() {
+      function openCloseElevator(hasArrived) {
         // open & close, and add 3 or 2 second delay
         floorArray.shift();
-        if (elevatorDirection === "up") {
+        if (hasArrived && elevatorDirection === "up") {
           numFloorsToVisitUp--;
-        } else {
+        } else if (hasArrived && elevatorDirection === "down") {
           numFloorsToVisitDown--;
         }
 
@@ -237,7 +255,7 @@
 
       function moveElevatorUp() {
         if (currentFloor === floorArray[0]) {
-          openCloseElevator();
+          openCloseElevator(true);
           return;
         }
 
@@ -254,7 +272,7 @@
 
       function moveElevatorDown() {
         if (currentFloor === floorArray[0]) {
-          openCloseElevator();
+          openCloseElevator(true);
           return;
         }
 
