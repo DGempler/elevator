@@ -178,17 +178,45 @@
         }
 
         floorArray.push(floor);
-        for (i = floorArray.length -1; ;) {
 
+        for (i = floorArray.length -2; i >= numFloorsToVisitUp; i--) {
+          if (floor > floorArray[i]) {
+            floorArray[i+1] = floorArray[i];
+          } else {
+            break;
+          }
+        }
+        floorArray[i + 1] = floor;
+
+        console.log(floorArray);
+
+        numFloorsToVisitDown++;
+
+      }
+
+      function sortOtherDirectionUp(floor) {
+        var upFloors = floorArray.slice(numFloorsToVisitDown);
+        var i;
+        console.log(upFloors);
+        if (upFloors.indexOf(floor) !== -1) {
+          // what is direction is wrong?
+          return;
         }
 
+        floorArray.push(floor);
 
+        for (i = floorArray.length -2; i >= numFloorsToVisitDown; i--) {
+          if (floor < floorArray[i]) {
+            floorArray[i+1] = floorArray[i];
+          } else {
+            break;
+          }
+        }
+        floorArray[i + 1] = floor;
 
+        console.log(floorArray);
 
-
-
-
-
+        numFloorsToVisitUp++;
 
       }
 
@@ -229,6 +257,7 @@
           elevatorDirection = "up";
         } else {
           elevatorDirection = null;
+          console.log("done moving!!!");
         }
 
         console.log(elevatorDirection);
