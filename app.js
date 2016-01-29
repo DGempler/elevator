@@ -105,14 +105,10 @@
       }
 
       function insertInOtherDirection(floor) {
-        if (elevatorDirection === null) {
-          // remove this check since do in handleInElv?
-          // or leave just in case it gets set to null just before next button is pressed?
-          setInitialDirection(floor);
-          floorArray.push(floor);
-          console.log(floorArray);
-        } else if (elevatorDirection === "down") {
-
+        if (elevatorDirection === "up") {
+          sortOtherDirectionDown(floor);
+        } else {
+          sortOtherDirectionUp(floor);
         }
       }
 
@@ -146,7 +142,7 @@
       }
 
       function sortCurrentDirectionDown(floor) {
-        var downFloors = floorArray.slice(0, numFloorsToVisitUp + 1);
+        var downFloors = floorArray.slice(0, numFloorsToVisitDown + 1);
         var i;
         if (downFloors.indexOf(floor) !== -1) {
           // what is direction is wrong?
@@ -167,6 +163,19 @@
         console.log(floorArray);
 
         numFloorsToVisitDown++;
+
+      }
+
+      function sortOtherDirectionDown(floor) {
+        var downFloors = floorArray.slice(numFloorsToVisitUp);
+        console.log(upFloors)
+
+
+
+
+
+
+
 
       }
 
