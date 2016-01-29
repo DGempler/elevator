@@ -147,7 +147,7 @@
       }
 
       function activateElevator() {
-        if (elevatorDirection === null) {
+        if (elevatorDirection === null || doorsOpened) {
           return;
         }
 
