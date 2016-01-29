@@ -204,6 +204,7 @@
 
       function openCloseElevator() {
         // open & close, and add 3 or 2 second delay
+        setNewDirection();
         doorsOpened = true;
         console.log("opening elevator");
         setTimeout(function() {
@@ -211,7 +212,6 @@
           if (doorsOpened) {
             console.log('closing elevator');
             doorsOpened = false;
-            setNewDirection();
             activateElevator();
           }
         }, 3000);
