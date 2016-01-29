@@ -1,11 +1,5 @@
 "use strict";
 
-/*
-refactor by passing state into functions instead of storing in variables?
-
-make sure to handle button presses inside elevator if nobodfy has pressed call yet
-*/
-
 (function() {
 
   angular.module('elevator', [])
@@ -18,18 +12,19 @@ make sure to handle button presses inside elevator if nobodfy has pressed call y
 
     function elevatorController() {
       var vm = this;
-      vm.floors = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-      vm.floorArray = [null, null, null, null, null, null, null, null, null, null, null, null];
       var currentFloor = 0;
       var elevatorDirection = null;
+      var floorArray = [];
       var numFloorsToVisitUp = 0;
       var numFloorsToVisitDown = 0;
       var pending = false;
 
+      vm.floors = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
       vm.handleCallButtonPress = function(floor, isUp) {
         if (currentFloor === floor) {
           openCloseElevator();
+          // wait for in elev button press
         } else {
           addCallToPendingFloors(floor, isUp);
         }
@@ -38,67 +33,117 @@ make sure to handle button presses inside elevator if nobodfy has pressed call y
 
       vm.handleInElevButtonPress = function(floor) {
 
-        if (floor === currentFloor) {
+        if (currentFloor === floor) {
           openCloseElevator();
           return;
         }
 
-        if (!elevatorDirection) {
-          determineInitialDirection(floor);
-          addToPendingFloors(floor);
+        if (elevatorDirection === null && floorArray.length === 0) {
+          // do these things here?
+          // setInitialDirection();
+          // floorArray.push(floor);
+          insertInCurrentDirection(floor);
           activateElevator();
-        } else {
-          addToPendingFloors(floor);
+          return;
+        }
+
+        if (floor > currentFloor && elevatorDirection === "up") {
+
+          // true for heading same direction as current elevator
+          insertInCurrentDirection(floor);
+
+        } else if (floor < currentFloor && elevatorDirection === "down") {
+
+          // true for heading same direction as current elevator
+          insertInCurrentDirection(floor);
+
         }
 
       };
 
-      function determineInitialDirection(floor) {
-
-        if (floor > currentFloor) {
-          elevatorDirection = "up";
-        } else {
-          elevatorDirection = "down";
-        }
-
-      }
-
-      // refactor!!!
-      function addToPendingFloors(floor) {
-        vm.floorArray[floor] = 'stop';
-        addToVisitCounter(floor);
-      }
 
       function addCallToPendingFloors(floor, isUp) {
-        if (isUp) {
-          vm.floorArray[floor] = 'up';
-        } else {
-          vm.floorArray[floor] = 'down';
+        if (floor > currentFloor && (elevatorDirection === "up" || elevatorDirection === null)) {
+          insertIntoFloorArray(floor, true, isUp);
+        } else if (floor < currentFloor && (elevatorDirection === "down" || elevatorDirection === null)) {
+          insertIntoFloorArray(floor, true, isUp);
+        } else if (floor > currentFloor && elevatorDirection === "down") {
+          insertIntoFloorArray(floor, false, isUp);
+        } else if (floor < currentFloor && elevatorDirection === "up") {
+          insertIntoFloorArray(floor, false, isUp);
         }
-
-        addToVisitCounter(floor);
 
       }
 
-      function addToVisitCounter(floor) {
-        if (elevatorDirection === "up" && floor > currentFloor) {
+      function insertIntoFloorArray(floor, isHeadingSameDirection, isUp) {
+
+      }
+
+
+
+      function insertInCurrentDirection(floor) {
+        if (elevatorDirection === null) {
+          // remove this check since do in handleInElv?
+          // or leave just in case it gets set to null just before next button is pressed?
+          setInitialDirection(floor);
+          floorArray.push(floor);
+          console.log(floorArray);
+
+        } else if (elevatorDirection === "up") {
+          // moved to sort Current Direction functions
+          // floorArray.splice(numFloorsToVisitUp, 0, floor);
+          sortCurrentDirectionUp(floor);
           numFloorsToVisitUp++;
-        } else if (elevatorDirection === "down" && floor < currentFloor) {
-          numFloorsToVisitDown++;
-        } else if (elevatorDirection === "down" && floor > currentFloor) {
-          numFloorsToVisitUp++;
-        } else if (elevatorDirection === "up" && floor < currentFloor) {
-          numFloorsToVisitDown++;
-        } else if (elevatorDirection === null && floor > currentFloor) {
-          numFloorsToVisitUp++;
-        } else if (elevatorDirection === null && floor < currentFloor) {
+        } else {
+          // floorArray.splice(numFloorsToVisitDown, 0, floor);
+          sortCurrentDirectionDown(floor);
           numFloorsToVisitDown++;
         }
-        console.log("up");
-        console.log(numFloorsToVisitUp);
-        console.log("down");
-        console.log(numFloorsToVisitDown);
-        console.log(vm.floorArray);
+
+      }
+
+      // already compared current floor, compare existing floors to determine where to put it
+      function sortCurrentDirectionUp(floor) {
+        var upFloors = floorArray.slice(0, numFloorsToVisitUp + 1);
+        if (upFloors.indexOf(floor) !== -1) {
+          // what is direction is wrong?
+          return;
+        }
+
+        floorArray.splice(numFloorsToVisitUp, 0, floor);
+
+        for (var i = floorArray.length -2; i > -1; i--) {
+          if (floor < floorArray[i]) {
+            floorArray[i+1] = floorArray[i];
+          } else {
+            floorArray[i + 1] = floor;
+            break;
+          }
+        }
+
+        console.log(floorArray);
+
+      }
+
+      function sortCurrentDirectionDown(floor) {
+        var downFloors = floorArray.slice(0, numFloorsToVisitUp + 1);
+        if (downFloors.indexOf(floor) !== -1) {
+          // what is direction is wrong?
+          return;
+        }
+
+        floorArray.splice(numFloorsToVisitDown, 0, floor);
+
+        for (var i = floorArray.length -2; i > -1; i--) {
+          if (floor > floorArray[i]) {
+            floorArray[i+1] = floorArray[i];
+          } else {
+            floorArray[i + 1] = floor;
+            break;
+          }
+        }
+
+        console.log(floorArray);
       }
 
       function activateElevator() {
@@ -106,72 +151,104 @@ make sure to handle button presses inside elevator if nobodfy has pressed call y
           return;
         }
 
-        while(!pending) {
+        // dequeue (shift) from floorArray to get next floor. If direction is up and current floor is bigger,
+        // increment currentFloor by one and moveElevator() every time
+        var nextStop = floorArray.shift();
 
-          if (elevatorDirection === "up") {
-            while (numFloorsToVisitUp) {
-              currentFloor++;
-              determineFloorAction();
-              numFloorsToVisitUp--;
-            }
-          } else if (elevatorDirection === "down") {
-            while (numFloorsToVisitDown) {
-              currentFloor--;
-              determineFloorAction();
-              numFloorsToVisitDown--;
-            }
-          }
+        if (elevatorDirection === "up") {
+          moveElevatorUp(nextStop);
 
+        } else {
+          moveElevatorDown(nextStop);
         }
 
-        determineNewDirection();
-        activateElevator();
+        // need to pass in nextStop / current floor? for front-end
+
+        // activate these inside of moveElevator Up/Down functions
+        // openCloseElevator();
+
+        // setNewDirection();
+        // activateElevator();
 
       }
 
-      function determineFloorAction() {
-        if (vm.floorArray[currentFloor] === "stop" || vm.floorArray[currentFloor] === elevatorDirection) {
-          vm.floorArray[currentFloor] = null;
-          openCloseElevator();
-        } else if (vm.floorArray[currentFloor] === null || vm.floorArray[currentFloor] !== elevatorDirection) {
-          moveElevator();
-        }
-      }
-
-      // refactor!
-      function determineNewDirection() {
-        if (elevatorDirection === "up" && numFloorsToVisitUp) {
+      function setNewDirection() {
+        if (elevatorDirection === "up" && currentFloor < floorArray[0]) {
           return;
-        } else if (elevatorDirection === "down" && numFloorsToVisitDown) {
+        } else if (elevatorDirection === "down" && currentFloor > floorArray[0]) {
           return;
-        } else if (elevatorDirection === "up" && numFloorsToVisitDown) {
+        } else if (elevatorDirection === "up" && currentFloor > floorArray[0]) {
           elevatorDirection = "down";
-        } else if (elevatorDirection === "down" && numFloorsToVisitUp) {
+        } else if (elevatorDirection === "down" && currentFloor < floorArray[0]) {
           elevatorDirection = "up";
         } else {
           elevatorDirection = null;
         }
+
+        console.log(elevatorDirection);
+      }
+
+      function setInitialDirection(floor) {
+        console.log('setting initial direction');
+        if (floor > currentFloor) {
+          elevatorDirection = "up";
+          numFloorsToVisitUp++;
+        } else {
+          elevatorDirection = "down";
+          numFloorsToVisitDown++;
+        }
+
+        console.log(elevatorDirection);
+
       }
 
       function openCloseElevator() {
         // open & close, and add 3 or 2 second delay
-        pending = true;
-        console.log("opening and closing elevator");
+        console.log("opening elevator");
         setTimeout(function() {
-          pending = false;
+          console.log('closing elevator');
+          setNewDirection();
+          activateElevator();
         }, 3000);
       }
 
-      function moveElevator() {
-        // add 1 second delay
-        pending = true;
-        console.log("movingElevator");
+
+      function moveElevatorUp(nextStop) {
+        if (currentFloor === nextStop) {
+          openCloseElevator();
+          return;
+        }
+
+        numFloorsToVisitUp--;
+        console.log("moving");
         setTimeout(function() {
-          pending = false;
+          console.log('done moving');
+          currentFloor++;
+          console.log(currentFloor);
+          moveElevatorUp(nextStop);
         }, 1000);
+
+      }
+
+      function moveElevatorDown(nextStop) {
+        if (currentFloor === nextStop) {
+          openCloseElevator();
+          return;
+        }
+
+        numFloorsToVisitDown--;
+        console.log("moving");
+        setTimeout(function() {
+          console.log('done moving');
+          currentFloor--;
+          console.log(currentFloor);
+          moveElevatorDown(nextStop);
+        }, 1000);
+
       }
 
     }
+
 
 
     function floorFilter() {
