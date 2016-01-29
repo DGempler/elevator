@@ -17,7 +17,7 @@
       var floorArray = [];
       var numFloorsToVisitUp = 0;
       var numFloorsToVisitDown = 0;
-      var pending = false;
+      var doorsOpened = false;
 
       vm.floors = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -204,11 +204,16 @@
 
       function openCloseElevator() {
         // open & close, and add 3 or 2 second delay
+        doorsOpened = true;
         console.log("opening elevator");
         setTimeout(function() {
-          console.log('closing elevator');
-          setNewDirection();
-          activateElevator();
+          // to only close elevator and call functions once
+          if (doorsOpened) {
+            console.log('closing elevator');
+            doorsOpened = false;
+            setNewDirection();
+            activateElevator();
+          }
         }, 3000);
       }
 
