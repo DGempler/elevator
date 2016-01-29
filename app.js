@@ -153,13 +153,13 @@
 
         // dequeue (shift) from floorArray to get next floor. If direction is up and current floor is bigger,
         // increment currentFloor by one and moveElevator() every time
-        var nextStop = floorArray.shift();
+
 
         if (elevatorDirection === "up") {
-          moveElevatorUp(nextStop);
+          moveElevatorUp();
 
         } else {
-          moveElevatorDown(nextStop);
+          moveElevatorDown();
         }
 
         // need to pass in nextStop / current floor? for front-end
@@ -204,6 +204,7 @@
 
       function openCloseElevator() {
         // open & close, and add 3 or 2 second delay
+        floorArray.shift();
         setNewDirection();
         doorsOpened = true;
         console.log("opening elevator");
@@ -218,8 +219,8 @@
       }
 
 
-      function moveElevatorUp(nextStop) {
-        if (currentFloor === nextStop) {
+      function moveElevatorUp() {
+        if (currentFloor === floorArray[0]) {
           openCloseElevator();
           return;
         }
@@ -230,13 +231,13 @@
           console.log('done moving');
           currentFloor++;
           console.log(currentFloor);
-          moveElevatorUp(nextStop);
+          moveElevatorUp();
         }, 1000);
 
       }
 
-      function moveElevatorDown(nextStop) {
-        if (currentFloor === nextStop) {
+      function moveElevatorDown() {
+        if (currentFloor === floorArray[0]) {
           openCloseElevator();
           return;
         }
@@ -247,7 +248,7 @@
           console.log('done moving');
           currentFloor--;
           console.log(currentFloor);
-          moveElevatorDown(nextStop);
+          moveElevatorDown();
         }, 1000);
 
       }
