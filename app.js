@@ -190,11 +190,8 @@
           return;
         }
 
-        console.log('numfloorstovisitup: ' + numFloorsToVisitUp);
         floorObject = { floor: floor, up: upRequest, down: downRequest };
         floorArray.splice(numFloorsToVisitUp, 0, floorObject);
-        console.log(floorArray);
-        console.log("i = " + (floorArray.length -2));
 
         for (i = numFloorsToVisitUp -1; i > -1; i--) {
           if (floorObject.floor < floorArray[i].floor) {
@@ -212,23 +209,40 @@
       }
 
       function sortCurrentDirectionDown(floor, upRequest, downRequest) {
-        var downFloors = floorArray.slice(0, numFloorsToVisitDown + 1);
         var i;
-        if (downFloors.indexOf(floor) !== -1) {
-          // what is direction is wrong?
+        var floorObject;
+        var downFloors = floorArray.slice(0, numFloorsToVisitDown + 1);
+        var filteredDownFloors = downFloors.map(function(floor) {
+          return floor.floor;
+        });
+        var floorIndex = filteredDownFloors.indexOf(floor);
+
+        if (floorIndex !== -1) {
+
+          floorObject = floorArray[floorIndex];
+
+          if (!floorObject.up && upRequest) {
+            floorObject.up = upRequest;
+          }
+
+          if (!floorObject.down && downRequest) {
+            floorObject.down = downRequest;
+          }
+
           return;
         }
 
-        floorArray.splice(numFloorsToVisitDown, 0, { floor: floor, up: upRequest, down: !upRequest });
+        floorObject = { floor: floor, up: upRequest, down: downRequest };
+        floorArray.splice(numFloorsToVisitDown, 0, floorObject);
 
         for (i = numFloorsToVisitDown -1; i > -1; i--) {
-          if (floor > floorArray[i]) {
+          if (floorObject.floor > floorArray[i].floor) {
             floorArray[i+1] = floorArray[i];
           } else {
             break;
           }
         }
-        floorArray[i + 1] = floor;
+        floorArray[i + 1] = floorObject;
 
         console.log(floorArray);
 
