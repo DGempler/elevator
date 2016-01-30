@@ -164,12 +164,29 @@
         }
       }
 
+
       // already compared current floor, compare existing floors to determine where to put it
       function sortCurrentDirectionUp(floor, upRequest) {
-        var upFloors = floorArray.slice(0, numFloorsToVisitUp + 1);
         var i;
-        if (upFloors.indexOf(floor) !== -1) {
+        var foundFloor;
+        var upFloors = floorArray.slice(0, numFloorsToVisitUp + 1);
+        var filteredUpFloors = upFloors.map(function(floor) {
+          return floor.floor;
+        });
+        var floorIndex = filteredUpFloors.indexOf(floor);
+
+        if (floorIndex !== -1) {
           // what is direction is wrong?
+          foundFloor = floorArray[floorIndex];
+
+          if (!foundFloor.up && upRequest) {
+            foundFloor.up = upRequest;
+          }
+
+          if (!foundFloor.down && !upRequest) {
+            foundFloor.down = !upRequest;
+          }
+
           return;
         }
 
