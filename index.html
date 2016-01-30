@@ -23,8 +23,8 @@
           <div id="doors">doors</div>
           <div id="floor-indicator">{{ floor | floorFilter }}</div>
           <div id="call-buttons">
-            <span ng-hide="floor === 9" ng-click="elevator.handleCallButtonPress(floor, true, false)" class="glyphicon glyphicon-arrow-up"></span>
-            <span ng-hide="floor === 0" ng-click="elevator.handleCallButtonPress(floor, false, true)" class="glyphicon glyphicon-arrow-down"></span>
+            <span ng-hide="floor === 9" ng-click="elevator.handleCallButtonPress(floor, true, null)" class="glyphicon glyphicon-arrow-up"></span>
+            <span ng-hide="floor === 0" ng-click="elevator.handleCallButtonPress(floor, null, true)" class="glyphicon glyphicon-arrow-down"></span>
           </div>
         </div>
 
