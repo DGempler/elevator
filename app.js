@@ -36,13 +36,7 @@
           // do these things here?
           setInitialDirection(floor);
 
-          if (upRequest) {
-            direction = "up";
-          } else {
-            direction = "down";
-          }
-
-          floorArray.push({ floor: floor, direction: direction });
+          floorArray.push({ floor: floor, up: upRequest, down: !upRequest });
           console.log(floorArray);
           // insertInCurrentDirection(floor);
           activateElevator();
