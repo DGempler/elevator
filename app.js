@@ -329,13 +329,13 @@
       }
 
       function setNewDirection() {
-        if (elevatorDirection === "up" && currentFloor < floorArray[0]) {
+        if (elevatorDirection === "up" && currentFloor < floorArray[0].floor) {
           return;
-        } else if (elevatorDirection === "down" && currentFloor > floorArray[0]) {
+        } else if (elevatorDirection === "down" && currentFloor > floorArray[0].floor) {
           return;
-        } else if (elevatorDirection === "up" && currentFloor > floorArray[0]) {
+        } else if (elevatorDirection === "up" && currentFloor > floorArray[0].floor) {
           elevatorDirection = "down";
-        } else if (elevatorDirection === "down" && currentFloor < floorArray[0]) {
+        } else if (elevatorDirection === "down" && currentFloor < floorArray[0].floor) {
           elevatorDirection = "up";
         } else {
           elevatorDirection = null;
@@ -384,7 +384,7 @@
 
 
       function moveElevatorUp() {
-        if (currentFloor === floorArray[0]) {
+        if (currentFloor === floorArray[0].floor) {
           openCloseElevator(true);
           return;
         }
@@ -399,7 +399,7 @@
       }
 
       function moveElevatorDown() {
-        if (currentFloor === floorArray[0]) {
+        if (currentFloor === floorArray[0].floor) {
           openCloseElevator(true);
           return;
         }
