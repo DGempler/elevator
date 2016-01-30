@@ -329,14 +329,22 @@
       }
 
       function setNewDirection() {
-        if (elevatorDirection === "up" && currentFloor < floorArray[0].floor) {
-          return;
-        } else if (elevatorDirection === "down" && currentFloor > floorArray[0].floor) {
-          return;
-        } else if (elevatorDirection === "up" && currentFloor > floorArray[0].floor) {
-          elevatorDirection = "down";
-        } else if (elevatorDirection === "down" && currentFloor < floorArray[0].floor) {
-          elevatorDirection = "up";
+        // refactor!!!
+        if (floorArray[0]) {
+
+          if (elevatorDirection === "up" && currentFloor < floorArray[0].floor) {
+            return;
+          } else if (elevatorDirection === "down" && currentFloor > floorArray[0].floor) {
+            return;
+          } else if (elevatorDirection === "up" && currentFloor > floorArray[0].floor) {
+            elevatorDirection = "down";
+          } else if (elevatorDirection === "down" && currentFloor < floorArray[0].floor) {
+            elevatorDirection = "up";
+          } else {
+            elevatorDirection = null;
+            console.log("done moving!!!");
+          }
+
         } else {
           elevatorDirection = null;
           console.log("done moving!!!");
