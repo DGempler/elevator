@@ -53,25 +53,25 @@
 
         } else if (floor > currentFloor && elevatorDirection === "up" && downRequest) {
           console.log('case 3');
-          insertInOtherDirection(floor);
+          insertInOtherDirection(floor, upRequest, downRequest);
         } else if (floor < currentFloor && elevatorDirection === "down" && upRequest) {
           console.log('case 4');
-          insertInOtherDirection(floor);
+          insertInOtherDirection(floor, upRequest, downRequest);
         } else if (floor > currentFloor && elevatorDirection === "down" && upRequest) {
 
-          insertInOtherDirection(floor);
+          insertInOtherDirection(floor, upRequest, downRequest);
 
         } else if (floor < currentFloor && elevatorDirection === "up" && downRequest) {
 
-          insertInOtherDirection(floor);
+          insertInOtherDirection(floor, upRequest, downRequest);
 
         } else if (floor < currentFloor && elevatorDirection === "up" && upRequest) {
 
-          insertInOtherDirection(floor);
+          insertInOtherDirection(floor, upRequest, downRequest);
 
         } else if (floor > currentFloor && elevatorDirection === "down" && downRequest) {
 
-          insertInOtherDirection(floor);
+          insertInOtherDirection(floor, upRequest, downRequest);
 
         } else {
           console.log("you have unlocked the secret $$$$$$$$$$$$$$$$$$$$$ basement");
@@ -156,11 +156,11 @@
 
       }
 
-      function insertInOtherDirection(floor) {
+      function insertInOtherDirection(floor, upRequest, downRequest) {
         if (elevatorDirection === "up") {
-          sortOtherDirectionDown(floor);
+          sortOtherDirectionDown(floor, upRequest, downRequest);
         } else {
-          sortOtherDirectionUp(floor);
+          sortOtherDirectionUp(floor, upRequest, downRequest);
         }
       }
 
@@ -251,24 +251,40 @@
       }
 
       function sortOtherDirectionDown(floor, upRequest, downRequest) {
-        var downFloors = floorArray.slice(numFloorsToVisitUp);
         var i;
-        console.log(downFloors);
-        if (downFloors.indexOf(floor) !== -1) {
-          // what is direction is wrong?
+        var floorObject;
+        var downFloors = floorArray.slice(numFloorsToVisitUp);
+        var filteredDownFloors = downFloors.map(function(floor) {
+          return floor.floor;
+        });
+        var floorIndex = filteredDownFloors.indexOf(floor);
+
+        if (floorIndex !== -1) {
+
+          floorObject = floorArray[floorIndex];
+
+          if (!floorObject.up && upRequest) {
+            floorObject.up = upRequest;
+          }
+
+          if (!floorObject.down && downRequest) {
+            floorObject.down = downRequest;
+          }
+
           return;
         }
 
-        floorArray.push({ floor: floor, up: upRequest, down: !upRequest });
+        floorObject = { floor: floor, up: upRequest, down: downRequest };
+        floorArray.push(floorObject);
 
         for (i = floorArray.length -2; i >= numFloorsToVisitUp; i--) {
-          if (floor > floorArray[i]) {
+          if (floorObject > floorArray[i]) {
             floorArray[i+1] = floorArray[i];
           } else {
             break;
           }
         }
-        floorArray[i + 1] = floor;
+        floorArray[i + 1] = floorObject;
 
         console.log(floorArray);
 
