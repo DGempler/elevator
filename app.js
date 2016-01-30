@@ -168,7 +168,7 @@
       // already compared current floor, compare existing floors to determine where to put it
       function sortCurrentDirectionUp(floor, upRequest, downRequest) {
         var i;
-        var foundFloor;
+        var floorObject;
         var upFloors = floorArray.slice(0, numFloorsToVisitUp + 1);
         var filteredUpFloors = upFloors.map(function(floor) {
           return floor.floor;
@@ -176,33 +176,34 @@
         var floorIndex = filteredUpFloors.indexOf(floor);
 
         if (floorIndex !== -1) {
-          // what is direction is wrong?
-          foundFloor = floorArray[floorIndex];
 
-          if (!foundFloor.up && upRequest) {
-            foundFloor.up = upRequest;
+          floorObject = floorArray[floorIndex];
+
+          if (!floorObject.up && upRequest) {
+            floorObject.up = upRequest;
           }
 
-          if (!foundFloor.down && downRequest) {
-            foundFloor.down = !upRequest;
+          if (!floorObject.down && downRequest) {
+            floorObject.down = downRequest;
           }
 
           return;
         }
 
         console.log('numfloorstovisitup: ' + numFloorsToVisitUp);
-        floorArray.splice(numFloorsToVisitUp, 0, { floor: floor, up: upRequest, down: downRequest });
+        floorObject = { floor: floor, up: upRequest, down: downRequest };
+        floorArray.splice(numFloorsToVisitUp, 0, floorObject);
         console.log(floorArray);
         console.log("i = " + (floorArray.length -2));
 
         for (i = numFloorsToVisitUp -1; i > -1; i--) {
-          if (floor < floorArray[i]) {
+          if (floorObject.floor < floorArray[i].floor) {
             floorArray[i+1] = floorArray[i];
           } else {
             break;
           }
         }
-        floorArray[i + 1] = floor;
+        floorArray[i + 1] = floorObject;
 
         console.log(floorArray);
 
