@@ -45,11 +45,11 @@
 
         if (floor > currentFloor && elevatorDirection === "up" && upRequest) {
 
-          insertInCurrentDirection(floor);
+          insertInCurrentDirection(floor, upRequest);
 
         } else if (floor < currentFloor && elevatorDirection === "down" && !upRequest) {
 
-          insertInCurrentDirection(floor);
+          insertInCurrentDirection(floor, upRequest);
 
         } else if (floor > currentFloor && elevatorDirection === "up" && !upRequest) {
           console.log('case 3');
@@ -93,7 +93,7 @@
         if (elevatorDirection === null) {
           // do these things here?
           setInitialDirection(floor);
-          floorArray.push(floor);
+          floorArray.push({ floor: floor, up: null, down: null });
           console.log(floorArray);
           // insertInCurrentDirection(floor);
           activateElevator();
@@ -142,15 +142,15 @@
 
 
 
-      function insertInCurrentDirection(floor) {
+      function insertInCurrentDirection(floor, upRequest) {
         if (elevatorDirection === "up") {
           // moved to sort Current Direction functions
           // floorArray.splice(numFloorsToVisitUp, 0, floor);
-          sortCurrentDirectionUp(floor);
+          sortCurrentDirectionUp(floor, upRequest);
 
         } else {
           // floorArray.splice(numFloorsToVisitDown, 0, floor);
-          sortCurrentDirectionDown(floor);
+          sortCurrentDirectionDown(floor, upRequest);
 
         }
 
@@ -165,7 +165,7 @@
       }
 
       // already compared current floor, compare existing floors to determine where to put it
-      function sortCurrentDirectionUp(floor) {
+      function sortCurrentDirectionUp(floor, upRequest) {
         var upFloors = floorArray.slice(0, numFloorsToVisitUp + 1);
         var i;
         if (upFloors.indexOf(floor) !== -1) {
@@ -174,7 +174,7 @@
         }
 
         console.log('numfloorstovisitup: ' + numFloorsToVisitUp);
-        floorArray.splice(numFloorsToVisitUp, 0, floor);
+        floorArray.splice(numFloorsToVisitUp, 0, { floor: floor, up: upRequest, down: !upRequest });
         console.log(floorArray);
         console.log("i = " + (floorArray.length -2));
 
@@ -193,7 +193,7 @@
 
       }
 
-      function sortCurrentDirectionDown(floor) {
+      function sortCurrentDirectionDown(floor, upRequest) {
         var downFloors = floorArray.slice(0, numFloorsToVisitDown + 1);
         var i;
         if (downFloors.indexOf(floor) !== -1) {
@@ -201,7 +201,7 @@
           return;
         }
 
-        floorArray.splice(numFloorsToVisitDown, 0, floor);
+        floorArray.splice(numFloorsToVisitDown, 0, { floor: floor, up: upRequest, down: !upRequest });
 
         for (i = numFloorsToVisitDown -1; i > -1; i--) {
           if (floor > floorArray[i]) {
@@ -218,7 +218,7 @@
 
       }
 
-      function sortOtherDirectionDown(floor) {
+      function sortOtherDirectionDown(floor, upRequest) {
         var downFloors = floorArray.slice(numFloorsToVisitUp);
         var i;
         console.log(downFloors);
@@ -227,7 +227,7 @@
           return;
         }
 
-        floorArray.push(floor);
+        floorArray.push({ floor: floor, up: upRequest, down: !upRequest });
 
         for (i = floorArray.length -2; i >= numFloorsToVisitUp; i--) {
           if (floor > floorArray[i]) {
@@ -244,7 +244,7 @@
 
       }
 
-      function sortOtherDirectionUp(floor) {
+      function sortOtherDirectionUp(floor, upRequest) {
         var upFloors = floorArray.slice(numFloorsToVisitDown);
         var i;
         console.log(upFloors);
@@ -253,7 +253,7 @@
           return;
         }
 
-        floorArray.push(floor);
+        floorArray.push({ floor: floor, up: upRequest, down: !upRequest });
 
         for (i = floorArray.length -2; i >= numFloorsToVisitDown; i--) {
           if (floor < floorArray[i]) {
