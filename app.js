@@ -169,7 +169,14 @@
       function sortCurrentDirectionUp(floor, upRequest, downRequest) {
         var i;
         var floorObject;
-        var upFloors = floorArray.slice(0, numFloorsToVisitUp + 1);
+        var upFloors;
+
+        if (upRequest || downRequest) {
+          upFloors = floorArray.slice(0, numFloorsToVisitUp + 1);
+        } else {
+          upFloors = floorArray.slice();
+        }
+
         var filteredUpFloors = upFloors.map(function(floor) {
           return floor.floor;
         });
@@ -211,7 +218,15 @@
       function sortCurrentDirectionDown(floor, upRequest, downRequest) {
         var i;
         var floorObject;
-        var downFloors = floorArray.slice(0, numFloorsToVisitDown + 1);
+
+        var downFloors;
+
+        if (upRequest || downRequest) {
+          downFloors = floorArray.slice(0, numFloorsToVisitDown + 1);
+        } else {
+          downFloors = floorArray.slice();
+        }
+
         var filteredDownFloors = downFloors.map(function(floor) {
           return floor.floor;
         });
@@ -253,7 +268,14 @@
       function sortOtherDirectionDown(floor, upRequest, downRequest) {
         var i;
         var floorObject;
-        var downFloors = floorArray.slice(numFloorsToVisitUp);
+        var downFloors;
+
+        if (upRequest || downRequest) {
+          downFloors = floorArray.slice(numFloorsToVisitUp);
+        } else {
+          downFloors = floorArray.slice();
+        }
+
         var filteredDownFloors = downFloors.map(function(floor) {
           return floor.floor;
         });
@@ -295,7 +317,14 @@
       function sortOtherDirectionUp(floor, upRequest, downRequest) {
         var i;
         var floorObject;
-        var upFloors = floorArray.slice(numFloorsToVisitDown);
+        var upFloors;
+
+        if (upRequest || downRequest) {
+          upFloors = floorArray.slice(numFloorsToVisitDown);
+        } else {
+          upFloors = floorArray.slice();
+        }
+
         var filteredUpFloors = upFloors.map(function(floor) {
           return floor.floor;
         });
