@@ -46,7 +46,7 @@
           return;
         }
 
-        if (floor >=   currentFloor && elevatorDirection === "up" && upRequest) {
+        if (floor >= currentFloor && elevatorDirection === "up" && upRequest) {
 
           insertInCurrentDirection(floor, upRequest, downRequest);
 
@@ -479,8 +479,6 @@
           } else if (elevatorDirection === "down") {
             numFloorsToVisitDown--;
           }
-          floorArray.shift();
-          setNewDirection();
         }
 
 
@@ -491,6 +489,10 @@
           if (doorsOpened) {
             console.log('closing elevator');
             doorsOpened = false;
+            if (hasArrived) {
+              floorArray.shift();
+              setNewDirection();
+            }
             activateElevator();
           }
         }, 3000);
