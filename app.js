@@ -34,7 +34,7 @@
 
         if (elevatorDirection === null) {
           // do these things here?
-          setInitialDirection(floor);
+          setInitialDirection(floor, upRequest, downRequest);
 
           floorArray.push({ floor: floor, up: upRequest, down: downRequest});
           console.log(floorArray);
@@ -92,7 +92,7 @@
 
         if (elevatorDirection === null) {
           // do these things here?
-          setInitialDirection(floor);
+          setInitialDirection(floor, true, true);
           floorArray.push({ floor: floor, up: null, down: null });
           console.log(floorArray);
           // insertInCurrentDirection(floor);
@@ -100,7 +100,9 @@
           return;
         }
 
-        if (floor > currentFloor && elevatorDirection === "up") {
+        if (floor > currentFloor && elevatorDirection === "up" && floorArray[0].down) {
+          insertBeforeExistingFloors(floor);
+        } else if (floor > currentFloor && elevatorDirection === "up") {
 
           // true for heading same direction as current elevator
           insertInCurrentDirection(floor);
@@ -123,24 +125,6 @@
       };
 
 
-      function addCall(floor, isUp) {
-        if (floor > currentFloor && (elevatorDirection === "up" || elevatorDirection === null)) {
-          insertIntoFloorArray(floor, true, isUp);
-        } else if (floor < currentFloor && (elevatorDirection === "down" || elevatorDirection === null)) {
-          insertIntoFloorArray(floor, true, isUp);
-        } else if (floor > currentFloor && elevatorDirection === "down") {
-          insertIntoFloorArray(floor, false, isUp);
-        } else if (floor < currentFloor && elevatorDirection === "up") {
-          insertIntoFloorArray(floor, false, isUp);
-        }
-
-      }
-
-      function insertIntoFloorArray(floor, isHeadingSameDirection, isUp) {
-
-      }
-
-
 
       function insertInCurrentDirection(floor, upRequest, downRequest) {
         if (elevatorDirection === "up") {
@@ -161,6 +145,14 @@
           sortOtherDirectionDown(floor, upRequest, downRequest);
         } else {
           sortOtherDirectionUp(floor, upRequest, downRequest);
+        }
+      }
+
+      function insertBeforeExistingFloors(floor) {
+        if (elevatorDirection === "up") {
+          sortBeforeHeadingDownFloors(floor);
+        } else {
+          sortBeforeHeadingUpFloors(floor);
         }
       }
 
@@ -334,6 +326,18 @@
 
       }
 
+      function sortBeforeHeadingDownFloors(floor) {
+
+      }
+
+      function sortBeforeHeadingUpFloors(floor) {
+
+      }
+
+
+
+
+
       function activateElevator() {
         if (elevatorDirection === null || doorsOpened) {
           return;
@@ -385,14 +389,20 @@
         console.log(elevatorDirection);
       }
 
-      function setInitialDirection(floor) {
+      function setInitialDirection(floor, upRequest, downRequest) {
         console.log('setting initial direction');
-        if (floor > currentFloor) {
+        if (floor > currentFloor && upRequest) {
           elevatorDirection = "up";
           numFloorsToVisitUp++;
-        } else {
+        } else if (floor < currentFloor && downRequest) {
           elevatorDirection = "down";
           numFloorsToVisitDown++;
+        } else if (floor > currentFloor && downRequest) {
+          elevatorDirection = "up";
+          numFloorsToVisitDown++;
+        } else if (floor < currentFloor && upRequest) {
+          elevatorDirection = "down";
+          numFloorsToVisitUp++;
         }
 
         console.log(elevatorDirection);
