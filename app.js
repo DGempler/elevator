@@ -19,13 +19,17 @@
       var numFloorsToVisitDown = 0;
       var doorsOpened = false;
       var timeoutID;
+      var timeoutID2;
 
       vm.floors = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
       vm.handleCallButtonPress = function(floor, upRequest, downRequest) {
         if (currentFloor === floor && ((upRequest && elevatorDirection === "up") || (downRequest && elevatorDirection === "down"))) {
-          if (doorsOpened) {
+          if (timeoutID) {
             clearTimeout(timeoutID);
+          }
+          if (timeoutID2) {
+            clearTimeout(timeoutID2);
           }
           openCloseElevator();
           return;
@@ -82,8 +86,11 @@
       vm.handleInElevButtonPress = function(floor) {
 
         if (currentFloor === floor) {
-          if (doorsOpened) {
+          if (timeoutID) {
             clearTimeout(timeoutID);
+          }
+          if (timeoutID2) {
+            clearTimeout(timeoutID2);
           }
           openCloseElevator();
           return;
@@ -466,15 +473,17 @@
 
       function openCloseElevator(hasArrived) {
         // open & close, and add 3 or 2 second delay
-        if (hasArrived && elevatorDirection === "up") {
-          numFloorsToVisitUp--;
+        if (hasArrived) {
+          if (elevatorDirection === "up") {
+            numFloorsToVisitUp--;
+          } else if (elevatorDirection === "down") {
+            numFloorsToVisitDown--;
+          }
           floorArray.shift();
-        } else if (hasArrived && elevatorDirection === "down") {
-          numFloorsToVisitDown--;
-          floorArray.shift();
+          setNewDirection();
         }
 
-        setNewDirection();
+
         doorsOpened = true;
         console.log("opening elevator");
         timeoutID = setTimeout(function() {
@@ -491,7 +500,7 @@
       function moveElevatorUp() {
         if (currentFloor === floorArray[0].floor) {
           if (floorArray[0].up === undefined && floorArray[0].down === true) {
-            setTimeout(function() {
+            timeoutID2 = setTimeout(function() {
               currentFloor++;
               console.log(currentFloor);
               moveElevatorUp();
@@ -503,7 +512,7 @@
         }
 
 
-        setTimeout(function() {
+        timeoutID2 = setTimeout(function() {
           currentFloor++;
           console.log(currentFloor);
           moveElevatorUp();
@@ -514,7 +523,7 @@
       function moveElevatorDown() {
         if (currentFloor === floorArray[0].floor) {
           if (floorArray[0].down === undefined && floorArray[0].up === true) {
-            setTimeout(function() {
+            timeoutID2 = setTimeout(function() {
               currentFloor--;
               console.log(currentFloor);
               moveElevatorDown();
@@ -525,7 +534,7 @@
           return;
         }
 
-        setTimeout(function() {
+        timeoutID2 = setTimeout(function() {
           currentFloor--;
           console.log(currentFloor);
           moveElevatorDown();
