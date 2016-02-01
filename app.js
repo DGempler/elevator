@@ -46,33 +46,33 @@
           return;
         }
 
-        if (floor > currentFloor && elevatorDirection === "up" && upRequest) {
+        if (floor >= currentFloor && elevatorDirection === "up" && upRequest) {
 
           insertInCurrentDirection(floor, upRequest, downRequest);
 
-        } else if (floor < currentFloor && elevatorDirection === "down" && downRequest) {
+        } else if (floor <= currentFloor && elevatorDirection === "down" && downRequest) {
 
           insertInCurrentDirection(floor, upRequest, downRequest);
 
-        } else if (floor > currentFloor && elevatorDirection === "up" && downRequest) {
+        } else if (floor >= currentFloor && elevatorDirection === "up" && downRequest) {
           console.log('case 3');
           insertInOtherDirection(floor, upRequest, downRequest);
-        } else if (floor < currentFloor && elevatorDirection === "down" && upRequest) {
+        } else if (floor <= currentFloor && elevatorDirection === "down" && upRequest) {
           console.log('case 4');
           insertInOtherDirection(floor, upRequest, downRequest);
-        } else if (floor > currentFloor && elevatorDirection === "down" && upRequest) {
+        } else if (floor >= currentFloor && elevatorDirection === "down" && upRequest) {
 
           insertInOtherDirection(floor, upRequest, downRequest);
 
-        } else if (floor < currentFloor && elevatorDirection === "up" && downRequest) {
+        } else if (floor <= currentFloor && elevatorDirection === "up" && downRequest) {
 
           insertInOtherDirection(floor, upRequest, downRequest);
 
-        } else if (floor < currentFloor && elevatorDirection === "up" && upRequest) {
+        } else if (floor <= currentFloor && elevatorDirection === "up" && upRequest) {
 
           insertInOtherDirection(floor, upRequest, downRequest);
 
-        } else if (floor > currentFloor && elevatorDirection === "down" && downRequest) {
+        } else if (floor >= currentFloor && elevatorDirection === "down" && downRequest) {
 
           insertInOtherDirection(floor, upRequest, downRequest);
 
