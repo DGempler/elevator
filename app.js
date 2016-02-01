@@ -24,7 +24,7 @@
       vm.floors = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
       vm.handleCallButtonPress = function(floor, upRequest, downRequest) {
-        if (currentFloor === floor && ((upRequest && elevatorDirection === "up") || (downRequest && elevatorDirection === "down"))) {
+        if (currentFloor === floor && ((upRequest && elevatorDirection === "up") || (downRequest && elevatorDirection === "down") || elevatorDirection === null)) {
           if (timeoutID) {
             clearTimeout(timeoutID);
           }
@@ -46,7 +46,7 @@
           return;
         }
 
-        if (floor >= currentFloor && elevatorDirection === "up" && upRequest) {
+        if (floor >=   currentFloor && elevatorDirection === "up" && upRequest) {
 
           insertInCurrentDirection(floor, upRequest, downRequest);
 
