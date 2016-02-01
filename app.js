@@ -67,13 +67,11 @@ check if the floor already exists
           return;
         }
 
+        addCallToPendingFloors(floor, upRequest, downRequest);
+
         if (!elevatorDirection) {
           setInitialDirection(floor);
-
-          addCallToPendingFloors(floor, upRequest, downRequest);
-
           activateElevator();
-          return;
         }
 
       };
@@ -99,17 +97,17 @@ check if the floor already exists
           return;
         }
 
+        addToPendingFloors(floor);
+
         if (!elevatorDirection) {
           setInitialDirection(floor);
           activateElevator();
         }
 
-        addToPendingFloors(floor);
 
       };
 
       function setInitialDirection(floor) {
-        console.log('setting initial direction');
 
         if (floor > currentFloor) {
           elevatorDirection = "up";
@@ -117,8 +115,7 @@ check if the floor already exists
           elevatorDirection = "down";
         }
 
-        console.log(elevatorDirection);
-
+        console.log('setting initial direction to: ' + elevatorDirection);
       }
 
       function setNewDirection() {
@@ -210,12 +207,19 @@ check if the floor already exists
 
         if (floor.down) {
           numFloorsToVisitUp--;
+          if (!numFloorsToVisitUp) {
+            openCloseElevator(true);
+            return;
+          }
           numFloorsToVisitDown++;
         }
 
         if (floor.up) {
+          if (floor.stop) {
+            floor.stop = null;
+            numFloorsToVisitUp--;
+          }
           floor.up = null;
-          floor.stop = null;
           numFloorsToVisitUp--;
           openCloseElevator(true);
           return;
@@ -244,11 +248,19 @@ check if the floor already exists
 
         if (floor.up) {
           numFloorsToVisitDown--;
+          if (!numFloorsToVisitDown) {
+            openCloseElevator(true);
+            return;
+          }
           numFloorsToVisitUp++;
         }
 
 
         if (floor.down) {
+          if (floor.stop) {
+            floor.stop = null;
+            numFloorsToVisitDown--;
+          }
           floor.down = null;
           floor.stop = null;
           numFloorsToVisitDown--;
