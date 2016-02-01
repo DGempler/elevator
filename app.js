@@ -425,7 +425,15 @@
 
       function moveElevatorUp() {
         if (currentFloor === floorArray[0].floor) {
-          openCloseElevator(true);
+          if (!floorArray[0].up && floorArray[0].down) {
+            setTimeout(function() {
+              currentFloor++;
+              console.log(currentFloor);
+              moveElevatorUp();
+            }, 1000);
+          } else {
+            openCloseElevator(true);
+          }
           return;
         }
 
@@ -440,7 +448,15 @@
 
       function moveElevatorDown() {
         if (currentFloor === floorArray[0].floor) {
-          openCloseElevator(true);
+          if (!floorArray[0].down && floorArray[0].up) {
+            setTimeout(function() {
+              currentFloor--;
+              console.log(currentFloor);
+              moveElevatorDown();
+            }, 1000);
+          } else {
+            openCloseElevator(true);
+          }
           return;
         }
 
