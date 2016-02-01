@@ -23,8 +23,7 @@
       vm.floors = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
       vm.handleCallButtonPress = function(floor, upRequest, downRequest) {
-        var direction;
-        if (currentFloor === floor) {
+        if (currentFloor === floor && ((upRequest && elevatorDirection === "up") || (downRequest && elevatorDirection === "down"))) {
           if (doorsOpened) {
             clearTimeout(timeoutID);
           }
@@ -101,6 +100,8 @@
         }
 
         if (floor > currentFloor && elevatorDirection === "up" && floorArray[0].down) {
+          insertBeforeExistingFloors(floor);
+        } else if (floor < currentFloor && elevatorDirection === "down" && floorArray[0].up) {
           insertBeforeExistingFloors(floor);
         } else if (floor > currentFloor && elevatorDirection === "up") {
 
@@ -327,10 +328,63 @@
       }
 
       function sortBeforeHeadingDownFloors(floor) {
+        var i;
+        var floorObject;
+        var upFloors = floorArray.slice(numFloorsToVisitDown);
+        var filteredUpFloors = upFloors.map(function(floor) {
+          return floor.floor;
+        });
+        var floorIndex = filteredUpFloors.indexOf(floor);
 
+        if (floorIndex !== -1) {
+          return;
+        }
+
+        floorObject = { floor: floor, up: undefined, down: undefined };
+        floorArray.splice(numFloorsToVisitUp, 0, floorObject);
+
+        for (i = numFloorsToVisitUp -1; i > -1; i--) {
+          if (floorObject.floor < floorArray[i].floor) {
+            floorArray[i+1] = floorArray[i];
+          } else {
+            break;
+          }
+        }
+        floorArray[i + 1] = floorObject;
+
+        console.log(floorArray);
+
+        numFloorsToVisitUp++;
       }
 
       function sortBeforeHeadingUpFloors(floor) {
+        var i;
+        var floorObject;
+        var downFloors = floorArray.slice(numFloorsToVisitUp);
+        var filteredDownFloors = downFloors.map(function(floor) {
+          return floor.floor;
+        });
+        var floorIndex = filteredDownFloors.indexOf(floor);
+
+        if (floorIndex !== -1) {
+          return;
+        }
+
+        floorObject = { floor: floor, up: undefined, down: undefined };
+        floorArray.splice(numFloorsToVisitDown, 0, floorObject);
+
+        for (i = numFloorsToVisitDown -1; i > -1; i--) {
+          if (floorObject.floor > floorArray[i].floor) {
+            floorArray[i+1] = floorArray[i];
+          } else {
+            break;
+          }
+        }
+        floorArray[i + 1] = floorObject;
+
+        console.log(floorArray);
+
+        numFloorsToVisitDown++;
 
       }
 
@@ -412,11 +466,12 @@
 
       function openCloseElevator(hasArrived) {
         // open & close, and add 3 or 2 second delay
-        floorArray.shift();
         if (hasArrived && elevatorDirection === "up") {
           numFloorsToVisitUp--;
+          floorArray.shift();
         } else if (hasArrived && elevatorDirection === "down") {
           numFloorsToVisitDown--;
+          floorArray.shift();
         }
 
         setNewDirection();
@@ -435,7 +490,7 @@
 
       function moveElevatorUp() {
         if (currentFloor === floorArray[0].floor) {
-          if (!floorArray[0].up && floorArray[0].down) {
+          if (floorArray[0].up === undefined && floorArray[0].down === true) {
             setTimeout(function() {
               currentFloor++;
               console.log(currentFloor);
@@ -458,7 +513,7 @@
 
       function moveElevatorDown() {
         if (currentFloor === floorArray[0].floor) {
-          if (!floorArray[0].down && floorArray[0].up) {
+          if (floorArray[0].down === undefined && floorArray[0].up === true) {
             setTimeout(function() {
               currentFloor--;
               console.log(currentFloor);
