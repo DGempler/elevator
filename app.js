@@ -178,6 +178,10 @@ check if the floor already exists
           numFloorsToVisitUp++;
         } else if (floor < currentFloor) {
           numFloorsToVisitDown++;
+        } else if (floor === currentFloor && elevatorDirection === "up") {
+          numFloorsToVisitDown++;
+        } else if (floor === currentFloor && elevatorDirection === "down") {
+          numFloorsToVisitUp++;
         }
         console.log("up: " + numFloorsToVisitUp);
         console.log("down: " + numFloorsToVisitDown);
