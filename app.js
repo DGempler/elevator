@@ -45,6 +45,7 @@ check if the floor already exists
       }
 
       vm.handleCallButtonPress = function(floor, upRequest, downRequest) {
+        var floorObj;
         if (floor === currentFloor) {
           if (timeoutID) {
             clearTimeout(timeoutID);
@@ -53,13 +54,24 @@ check if the floor already exists
             clearTimeout(timeoutID2);
           }
 
+          floorObj = floorArray[floor];
+
           if (elevatorDirection === "up" && upRequest) {
-            floorArray[floor].up = null;
-            floorArray[floor].stop = null;
+            if (floorObj.up) {
+              console.log('uh-oh, up');
+            }
+
+            if (floorObj.stop) {
+              console.log('uh-oh, stop');
+            }
+
+
+            floorObj.up = null;
+            floorObj.stop = null;
             openCloseElevator();
           } else if (elevatorDirection === "down" && downRequest) {
-            floorArray[floor].stop = null;
-            floorArray[floor].down = null;
+            floorObj.stop = null;
+            floorObj.down = null;
             openCloseElevator();
           } else {
             addCallToPendingFloors(floor, upRequest, downRequest);
@@ -138,12 +150,20 @@ check if the floor already exists
 
       // refactor!!!
       function addToPendingFloors(floor) {
-        floorArray[floor].stop = true;
+        var floorObj = floorArray[floor];
+        if (floorObj.stop) {
+          return;
+        }
+        floorObj.stop = true;
         console.log(floorArray);
         addToVisitCounter(floor);
       }
 
       function addCallToPendingFloors(floor, upRequest, downRequest) {
+        var floorObj = floorArray[floor];
+        if ((floorObj.up && upRequest) || (floorObj.down && downRequest)) {
+          return;
+        }
         floorArray[floor].up = upRequest;
         floorArray[floor].down = downRequest;
         console.log(floorArray);
