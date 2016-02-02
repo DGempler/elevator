@@ -28,8 +28,8 @@ check if the floor already exists
       var numFloorsToVisitUp = 0;
       var numFloorsToVisitDown = 0;
       var doorsOpened = false;
-      var timeoutID;
-      var timeoutID2;
+      var doorTimeoutID;
+      var moveElevatorTimeoutID;
 
       function Floor() {
         this.stop = null;
@@ -47,12 +47,12 @@ check if the floor already exists
       vm.handleCallButtonPress = function(floor, upRequest, downRequest) {
         var floorObj;
         if (floor === currentFloor) {
-          if (timeoutID) {
-            clearTimeout(timeoutID);
+          if (doorTimeoutID) {
+            clearTimeout(doorTimeoutID);
           }
-          if (timeoutID2) {
-            clearTimeout(timeoutID2);
-          }
+          // if (moveElevatorTimeoutID) {
+          //   clearTimeout(moveElevatorTimeoutID);
+          // }
 
           floorObj = floorArray[floor];
 
@@ -91,12 +91,12 @@ check if the floor already exists
       vm.handleInElevButtonPress = function(floor) {
 
         if (floor === currentFloor) {
-          if (timeoutID) {
-            clearTimeout(timeoutID);
+          if (doorTimeoutID) {
+            clearTimeout(doorTimeoutID);
           }
-          if (timeoutID2) {
-            clearTimeout(timeoutID2);
-          }
+          // if (moveElevatorTimeoutID) {
+          //   clearTimeout(moveElevatorTimeoutID);
+          // }
 
           if (elevatorDirection === "up") {
             floorArray[floor].up = null;
@@ -202,7 +202,7 @@ check if the floor already exists
 
         doorsOpened = true;
         console.log("opening elevator");
-        timeoutID = setTimeout(function() {
+        doorTimeoutID = setTimeout(function() {
           // to only close elevator and call functions once
           if (doorsOpened) {
             console.log('closing elevator');
@@ -252,7 +252,7 @@ check if the floor already exists
           return;
         }
 
-        timeoutID2 = setTimeout(function() {
+        moveElevatorTimeoutID = setTimeout(function() {
           moveElevatorUp();
         }, 1000);
 
@@ -295,7 +295,7 @@ check if the floor already exists
           return;
         }
 
-        timeoutID2 = setTimeout(function() {
+        moveElevatorTimeoutID = setTimeout(function() {
           moveElevatorDown();
         }, 1000);
 
